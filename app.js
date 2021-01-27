@@ -28,7 +28,7 @@ defaultEnvs.set(
     APPLICATION_NAME: "Redirect URL",
     LOG_LEVEL: "warning",
     PORT: 80,
-    TO_URL: "https://www.kth.se/",
+    TO_URL: "https://www.kth.se",
     REDIRECT_ID: "",
   },
   log
@@ -80,9 +80,9 @@ app.get("/_monitor", function (request, response) {
  */
 app.use(function (request, response) {
   log.info(
-    `Redirecting: ${request.method} ${request.protocol}://${request.get(
+    `Redirecting: '${request.method} ${request.protocol}://${request.get(
       "Host"
-    )}${request.url} to ${process.env.TO_URL}`
+    )}${request.url}' to '${app.getRedirectUrl(request.url)}'.`
   );
   response.set(
     `x-kth-redirected-by`,
