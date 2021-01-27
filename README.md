@@ -12,7 +12,7 @@ So https://api.kth.se/api/old-api/ will be 301 moved permanetly TO_URL https://a
 and a request to https://api.kth.se/api/old-api/v1/endpoint will end up at https://api.kth.se/api/new-api/v1/endpoint.
 
 ```bash
-TO_URL='https://wwww.kth.se' REDIRECT_ID='Id added to header x-kth-redirected-id' node app.js
+TO_URL='https://wwww.kth.se' REDIRECT_ID='Id added to header x-kth-redirected-by-id' node app.js
 
 ```
 
