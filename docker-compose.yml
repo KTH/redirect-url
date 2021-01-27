@@ -5,6 +5,7 @@ services:
     build: .
     environment:
       TO_URL: "https://example.com"
+      REDIRECT_ID: "docker-compose.yml"
       LOG_LEVEL: "info"
       
     ports:
