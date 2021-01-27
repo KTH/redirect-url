@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  #############################################
+  # Start http://web:80/
+  #############################################
+  web:
+    # if not --build and kth-azure-app already exists in
+    # your local computers registry 'image' is used.
+    image: $LOCAL_IMAGE_ID
+    tty: true
+    
+    # Possible configuration for the app.
+    environment:
+      TO_URL: "https://www.kth.se"
+      REDIRECT_ID: "Docker Compose Integration Tests"
+    ports:
+      - 80
+
+      #############################################
+  # Start the client running tests 
+  # agains http://web:80/
+  #############################################
+  integration-tests:
+    # Build client image and run tests
+    # from inside that.
+    build: ./tests/integration-tests

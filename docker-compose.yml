@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    environment:
+      PORT: 3000 # Starts Node on this port, if not set defaults to 80.
+      PORTILLO_CLUSTER: "development" # Will show under /_monitor
+      APPINSIGHTS_INSTRUMENTATIONKEY: ""
+      LOG_LEVEL: "info"
+      APPLICATIONS_API_HOST: "api-r.referens.sys.kth.se"
+      APPLICATIONS_API_KEY: "1234"
+    
+    ports:
+      - 80:3000
