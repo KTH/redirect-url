@@ -7,6 +7,7 @@ const about = require("./config/version");
 const { log } = require("./modules/logger");
 const defaultEnvs = require("@kth/default-envs");
 const applicationInsights = require("./modules/applicationInsights");
+const { url } = require("inspector");
 const app = express();
 const started = new Date();
 
@@ -29,6 +30,7 @@ defaultEnvs.set(
     LOG_LEVEL: "warning",
     PORT: 80,
     TO_URL: "https://www.kth.se",
+    PATH_PREFIX: "some-path",
     REDIRECT_ID: "",
     TEMPORARY_REDIRECT: false,
   },
@@ -48,11 +50,13 @@ app.listen(process.env.PORT, function () {
 });
 
 app.getRedirectUrl = function (requestUrl) {
+  log.info(`requestUrl '${requestUrl}'.`);
+  let result = process.env.TO_URL + requestUrl;
   if (requestUrl.startsWith("/")) {
-    return process.env.TO_URL + requestUrl;
-  } else {
-    return process.env.TO_URL + "/" + requestUrl;
+    result = process.env.TO_URL + requestUrl.substring(1);
   }
+  log.debug(`Redirect to url '${result}'.`);
+  return result;
 };
 
 /**
@@ -64,19 +68,35 @@ app.useTemporaryRedirect = function () {
   }
   return false;
 };
+
+/**
+ * Is the env TEMPORARY_REDIRECT the string true
+ */
+app.getPathPrefix = function () {
+  let result = process.env.PATH_PREFIX;
+  if (process.env.PATH_PREFIX.startsWith("/")) {
+    result = process.env.PATH_PREFIX.substring(1);
+  }
+
+  log.debug(`Use path prefix '${result}'.`);
+  return result;
+};
+
 /********************* routes **************************/
 
 /**
- * About page. Versions and such.
+ * About page. Versions and such. Has to start with / for some reason to make Express
+ * accept it as a path.
  */
-app.get("/_about", function (request, response) {
+app.get(`/${app.getPathPrefix()}/_about`, function (request, response) {
   httpResponse.ok(request, response, templates._about(about, started));
 });
 
 /**
- * Health check route.
+ * Health check route. Has to start with / for some reason to make Express
+ * accept it as a path.
  */
-app.get("/_monitor", function (request, response) {
+app.get(`/${app.getPathPrefix()}/_monitor`, function (request, response) {
   httpResponse.ok(
     request,
     response,
@@ -89,12 +109,7 @@ app.get("/_monitor", function (request, response) {
  * Redirect all traffic
  */
 app.use(function (request, response) {
-  url = app.getRedirectUrl(request.url);
-  log.info(
-    `Redirecting: '${request.method} ${request.protocol}://${request.get(
-      "Host"
-    )}${request.url}' to '${url}'.`
-  );
+  let url = app.getRedirectUrl(request.url);
   response.set(
     `X-KTH-redirected-by`,
     `${about.dockerName}:${about.dockerVersion}`
@@ -104,8 +119,10 @@ app.use(function (request, response) {
   }
 
   if (app.useTemporaryRedirect()) {
+    log.info(`Temporary redirect request for '${request.url}' to '${url}'`);
     httpResponse.temporaryRedirect(response), url;
   } else {
+    log.info(`Permanent redirect request for '${request.url}' to '${url}'`);
     httpResponse.permanentRedirect(response, url);
   }
 });
