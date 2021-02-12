@@ -89,6 +89,7 @@ app.getPathPrefix = function () {
  * accept it as a path.
  */
 app.get(`/${app.getPathPrefix()}/_about`, function (request, response) {
+  console.log(JSON.stringify(request.headers));
   httpResponse.ok(request, response, templates._about(about, started));
 });
 
@@ -97,6 +98,7 @@ app.get(`/${app.getPathPrefix()}/_about`, function (request, response) {
  * accept it as a path.
  */
 app.get(`/${app.getPathPrefix()}/_monitor`, function (request, response) {
+  console.log(JSON.stringify(request.headers));
   httpResponse.ok(
     request,
     response,
@@ -109,6 +111,8 @@ app.get(`/${app.getPathPrefix()}/_monitor`, function (request, response) {
  * Redirect all traffic
  */
 app.use(function (request, response) {
+  console.log(JSON.stringify(request.headers));
+
   let url = app.getRedirectUrl(request.url);
   response.set(
     `X-KTH-redirected-by`,
