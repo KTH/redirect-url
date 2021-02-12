@@ -15,6 +15,7 @@ services:
     environment:
       TO_URL: "https://www.kth.se"
       REDIRECT_ID: "Docker Compose Integration Tests"
+      PATH_PREFIX: "/some-path"
     ports:
       - 80
 
@@ -26,3 +27,5 @@ services:
     # Build client image and run tests
     # from inside that.
     build: ./tests/integration-tests
+      
+
