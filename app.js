@@ -30,6 +30,7 @@ defaultEnvs.set(
     PORT: 80,
     TO_URL: "https://www.kth.se",
     REDIRECT_ID: "",
+    TEMPORARY_REDIRECT: false,
   },
   log
 );
@@ -54,6 +55,15 @@ app.getRedirectUrl = function (requestUrl) {
   }
 };
 
+/**
+ * Is the env TEMPORARY_REDIRECT the string true
+ */
+app.useTemporaryRedirect = function () {
+  if (String(process.env.TEMPORARY_REDIRECT).toLowerCase() == "true") {
+    return true;
+  }
+  return false;
+};
 /********************* routes **************************/
 
 /**
@@ -79,21 +89,23 @@ app.get("/_monitor", function (request, response) {
  * Redirect all traffic
  */
 app.use(function (request, response) {
+  url = app.getRedirectUrl(request.url);
   log.info(
     `Redirecting: '${request.method} ${request.protocol}://${request.get(
       "Host"
-    )}${request.url}' to '${app.getRedirectUrl(request.url)}'.`
+    )}${request.url}' to '${url}'.`
   );
   response.set(
-    `x-kth-redirected-by`,
+    `X-KTH-redirected-by`,
     `${about.dockerName}:${about.dockerVersion}`
   );
   if (process.env.REDIRECT_ID) {
-    response.set(`x-kth-redirected-by-id`, `${process.env.REDIRECT_ID}`);
+    response.set(`X-KTH-redirected-by-id`, `${process.env.REDIRECT_ID}`);
   }
 
-  response.redirect(
-    httpResponse.statusCodes.MOVED_PERMANENTLY,
-    app.getRedirectUrl(request.url)
-  );
+  if (app.useTemporaryRedirect()) {
+    httpResponse.temporaryRedirect(response), url;
+  } else {
+    httpResponse.permanentRedirect(response, url);
+  }
 });

@@ -12,7 +12,7 @@
   "dependencies": {
     "@kth/basic-html-templates": "^1.0.35",
     "@kth/default-envs": "^0.0.14",
-    "@kth/http-responses": "^1.0.33",
+    "@kth/http-responses": "^1.0.37",
     "applicationinsights": "^1.8.9",
     "express": "^4.17.1",
     "kth-node-log": "^3.1.3"
@@ -20,11 +20,11 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^8.2.1",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0."
   },
   "scripts": {
     "start": "node app.js",
-    "start-dev": "LOG_LEVEL=debug TO_URL='https://www.kth.se' nodemon app.js",
+    "start-dev": "TEMPORARY_REDIRECT='False' LOG_LEVEL=debug TO_URL='https://www.kth.se' nodemon app.js",
     "test": "NODE_ENV=development node_modules/mocha/bin/mocha ./tests/unit-tests/test-*.js",
     "test-integration": "TO_URL='https://www.kth.se' REDIRECT_ID='package.json' URL_PREFIX='http://localhost' ./tests/integration-tests/basic.sh",
     "test-integration-in-docker": "ID=$(docker build -q .) && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-integration-tests.yml build && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-integration-tests.yml up --force-recreate --abort-on-container-exit --always-recreate-deps",
