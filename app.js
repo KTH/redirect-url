@@ -89,8 +89,6 @@ app.use(function (request, response) {
     response.set(`X-KTH-redirect-id`, `${process.env.REDIRECT_ID}`);
   }
 
-  log.info(`${url} end is '/_about' ${url.endsWith("/_about")}.`);
-
   if (url.endsWith("/_about")) {
     httpResponse.ok(request, response, templates._about(about, started));
     return;
