@@ -110,10 +110,10 @@ app.use(function (request, response) {
   );
 
   if (app.useTemporaryRedirect()) {
-    log.info(`Temporary redirect request for '${request.url}' to '${url}'`);
+    log.info(`Temporary redirected request for '${request.url}' to '${url}'`);
     httpResponse.temporaryRedirect(response, url);
   } else {
-    log.info(`Permanent redirect request for '${request.url}' to '${url}'`);
+    log.info(`Permanent redirected request for '${request.url}' to '${url}'`);
     httpResponse.permanentRedirect(response, url);
   }
 });
