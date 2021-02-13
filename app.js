@@ -66,6 +66,9 @@ app.useTemporaryRedirect = function () {
   if (String(process.env.TEMPORARY_REDIRECT).toLowerCase() == "true") {
     return true;
   }
+  log.debug(
+    `Will not use temporary redirect since env TEMPORARY_REDIRECT is not 'true' ${process.env.TEMPORARY_REDIRECT}'.`
+  );
   return false;
 };
 
@@ -124,7 +127,7 @@ app.use(function (request, response) {
 
   if (app.useTemporaryRedirect()) {
     log.info(`Temporary redirect request for '${request.url}' to '${url}'`);
-    httpResponse.temporaryRedirect(response), url;
+    httpResponse.temporaryRedirect(response, url);
   } else {
     log.info(`Permanent redirect request for '${request.url}' to '${url}'`);
     httpResponse.permanentRedirect(response, url);
