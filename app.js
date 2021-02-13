@@ -1,5 +1,4 @@
 const { templates } = require("@kth/basic-html-templates");
-const appInsights = require("applicationinsights");
 const express = require("express");
 const os = require("os");
 const httpResponse = require("@kth/http-responses");
@@ -7,7 +6,6 @@ const about = require("./config/version");
 const { log } = require("./modules/logger");
 const defaultEnvs = require("@kth/default-envs");
 const applicationInsights = require("./modules/applicationInsights");
-const { url } = require("inspector");
 const app = express();
 const started = new Date();
 
@@ -41,6 +39,7 @@ defaultEnvs.set(
  * Start the server on configured port.
  */
 app.listen(process.env.PORT, function () {
+  app.cleanToUrl();
   log.info(
     `Started '${about.dockerName}:${
       about.dockerVersion
@@ -49,14 +48,21 @@ app.listen(process.env.PORT, function () {
   applicationInsights.init();
 });
 
-app.getRedirectUrl = function (requestUrl) {
-  log.info(`requestUrl '${requestUrl}'.`);
-  let result = process.env.TO_URL + requestUrl;
-  if (requestUrl.startsWith("/")) {
-    result = process.env.TO_URL + requestUrl.substring(1);
+/**
+ * Remove the last forward slash if present and update the TO_URL env.
+ */
+app.cleanToUrl = function () {
+  if (process.env.TO_URL.endsWith("/")) {
+    process.env["TO_URL"] = process.env["TO_URL"].slice(0, -1);
   }
-  log.debug(`Redirect to url '${result}'.`);
-  return result;
+};
+
+/**
+ * Gets the absolute url to redirect to.
+ * @param {*} requestUrl The path to redirect.
+ */
+app.getRedirectUrl = function (requestUrl) {
+  return process.env.TO_URL + requestUrl;
 };
 
 /**
@@ -80,7 +86,6 @@ app.getPathPrefix = function () {
   if (process.env.PATH_PREFIX.startsWith("/")) {
     result = process.env.PATH_PREFIX.substring(1);
   }
-
   log.debug(`Use path prefix '${result}'.`);
   return result;
 };
@@ -92,7 +97,6 @@ app.getPathPrefix = function () {
  * accept it as a path.
  */
 app.get(`/${app.getPathPrefix()}/_about`, function (request, response) {
-  console.log(JSON.stringify(request.headers));
   httpResponse.ok(request, response, templates._about(about, started));
 });
 
@@ -101,7 +105,6 @@ app.get(`/${app.getPathPrefix()}/_about`, function (request, response) {
  * accept it as a path.
  */
 app.get(`/${app.getPathPrefix()}/_monitor`, function (request, response) {
-  console.log(JSON.stringify(request.headers));
   httpResponse.ok(
     request,
     response,
@@ -111,11 +114,9 @@ app.get(`/${app.getPathPrefix()}/_monitor`, function (request, response) {
 });
 
 /**
- * Redirect all traffic
+ * Redirect all traffic that does not match $PATH_PREFIX/_monitor or $PATH_PREFIX/_about
  */
 app.use(function (request, response) {
-  console.log(JSON.stringify(request.headers));
-
   let url = app.getRedirectUrl(request.url);
   response.set(
     `X-KTH-redirected-by`,
