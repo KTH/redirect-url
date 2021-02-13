@@ -28,8 +28,7 @@ defaultEnvs.set(
     LOG_LEVEL: "warning",
     PORT: 80,
     TO_URL: "https://www.kth.se",
-    PATH_PREFIX: "some-path",
-    REDIRECT_ID: "",
+    REDIRECT_ID: "No redirect id specified",
     TEMPORARY_REDIRECT: false,
   },
   log
@@ -78,53 +77,37 @@ app.useTemporaryRedirect = function () {
   return false;
 };
 
-/**
- * Is the env TEMPORARY_REDIRECT the string true
- */
-app.getPathPrefix = function () {
-  let result = process.env.PATH_PREFIX;
-  if (process.env.PATH_PREFIX.startsWith("/")) {
-    result = process.env.PATH_PREFIX.substring(1);
-  }
-  log.debug(`Use path prefix '${result}'.`);
-  return result;
-};
-
 /********************* routes **************************/
 
 /**
- * About page. Versions and such. Has to start with / for some reason to make Express
- * accept it as a path.
- */
-app.get(`/${app.getPathPrefix()}/_about`, function (request, response) {
-  httpResponse.ok(request, response, templates._about(about, started));
-});
-
-/**
- * Health check route. Has to start with / for some reason to make Express
- * accept it as a path.
- */
-app.get(`/${app.getPathPrefix()}/_monitor`, function (request, response) {
-  httpResponse.ok(
-    request,
-    response,
-    templates._monitor((status = "OK")),
-    httpResponse.contentTypes.PLAIN_TEXT
-  );
-});
-
-/**
- * Redirect all traffic that does not match $PATH_PREFIX/_monitor or $PATH_PREFIX/_about
+ * Redirect all traffic that does not end with '/_monitor' or '/_about'.
  */
 app.use(function (request, response) {
   let url = app.getRedirectUrl(request.url);
+
+  if (process.env.REDIRECT_ID) {
+    response.set(`X-KTH-redirect-id`, `${process.env.REDIRECT_ID}`);
+  }
+
+  if (url.endsWith("/_about")) {
+    httpResponse.ok(request, response, templates._about(about, started));
+    return;
+  }
+
+  if (url.endsWith("/_monitor")) {
+    httpResponse.ok(
+      request,
+      response,
+      templates._monitor((status = "OK")),
+      httpResponse.contentTypes.PLAIN_TEXT
+    );
+    return;
+  }
+
   response.set(
     `X-KTH-redirected-by`,
     `${about.dockerName}:${about.dockerVersion}`
   );
-  if (process.env.REDIRECT_ID) {
-    response.set(`X-KTH-redirected-by-id`, `${process.env.REDIRECT_ID}`);
-  }
 
   if (app.useTemporaryRedirect()) {
     log.info(`Temporary redirect request for '${request.url}' to '${url}'`);
