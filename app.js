@@ -30,6 +30,8 @@ defaultEnvs.set(
     TO_URL: "https://www.kth.se",
     REDIRECT_ID: "No redirect id specified",
     TEMPORARY_REDIRECT: false,
+    REPLACE_PATH: undefined,
+    REPLACE_PATH_WITH: undefined,
   },
   log
 );
@@ -57,11 +59,21 @@ app.cleanToUrl = function () {
 };
 
 /**
- * Gets the absolute url to redirect to.
+ * Gets the absolute url to redirect to, also replaces any part of the
+ * url that matches REPLACE_PATH with REPLACE_PATH_WITH.
  * @param {*} requestUrl The path to redirect.
  */
 app.getRedirectUrl = function (requestUrl) {
-  return process.env.TO_URL + requestUrl;
+  let result = process.env.TO_URL + requestUrl;
+  if (process.env.REPLACE_PATH) {
+    if (process.env.REPLACE_PATH_WITH) {
+      result = result.replace(
+        process.env.REPLACE_PATH,
+        process.env.REPLACE_PATH_WITH
+      );
+    }
+  }
+  return result;
 };
 
 /**
