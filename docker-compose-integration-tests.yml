@@ -13,7 +13,7 @@ services:
     
     # Possible configuration for the app.
     environment:
-      TO_URL: "https://www.kth.se"
+      TO_HOST: "https://www.kth.se"
       REDIRECT_ID: "Docker Compose Integration Tests"
       PATH_PREFIX: "/some-path"
     ports:

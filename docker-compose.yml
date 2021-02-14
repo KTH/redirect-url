@@ -4,7 +4,7 @@ services:
   web:
     build: .
     environment:
-      TO_URL: "https://example.com"
+      TO_HOST: "https://example.com"
       TEMPORARY_REDIRECT: "True"
       REDIRECT_ID: "docker-compose.yml"
       

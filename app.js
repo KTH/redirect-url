@@ -27,7 +27,7 @@ defaultEnvs.set(
     APPLICATION_NAME: "Redirect URL",
     LOG_LEVEL: "warning",
     PORT: 80,
-    TO_URL: "https://www.kth.se",
+    TO_HOST: "https://www.kth.se",
     REDIRECT_ID: "No redirect id specified",
     TEMPORARY_REDIRECT: false,
     REPLACE_PATH: undefined,
@@ -50,11 +50,11 @@ app.listen(process.env.PORT, function () {
 });
 
 /**
- * Remove the last forward slash if present and update the TO_URL env.
+ * Remove the last forward slash if present and update the TO_HOST env.
  */
 app.cleanToUrl = function () {
-  if (process.env.TO_URL.endsWith("/")) {
-    process.env["TO_URL"] = process.env["TO_URL"].slice(0, -1);
+  if (process.env.TO_HOST.endsWith("/")) {
+    process.env["TO_HOST"] = process.env["TO_HOST"].slice(0, -1);
   }
 };
 
@@ -64,7 +64,7 @@ app.cleanToUrl = function () {
  * @param {*} requestUrl The path to redirect.
  */
 app.getRedirectUrl = function (requestUrl) {
-  let result = process.env.TO_URL + requestUrl;
+  let result = process.env.TO_HOST + requestUrl;
   if (process.env.REPLACE_PATH) {
     if (process.env.REPLACE_PATH_WITH) {
       result = result.replace(

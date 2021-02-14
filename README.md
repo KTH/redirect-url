@@ -2,17 +2,8 @@
 
 Redirect a url to another absolute or relative url
 
-Any request to the server `/` is redirected to `TO_URL` except `/_about` and `/_monitor`.
-
-For example:
-If you have an old api that you would like to redirect to a new adress https://api.kth.se/api/new-api/:
-
-Let node listen to the old adress and set TO_ADRESS to the new.
-So https://api.kth.se/api/old-api/ will be 301 moved permanetly TO_URL https://api.kth.se/api/new-api/.
-and a request to https://api.kth.se/api/old-api/v1/endpoint will end up at https://api.kth.se/api/new-api/v1/endpoint.
-
 ```bash
-TO_URL='https://wwww.kth.se' REDIRECT_ID='Id added to header x-kth-redirected-by-id' node app.js
+TO_HOST='https://wwww.kth.se' REDIRECT_ID='Id added to header x-kth-redirected-by-id' node app.js
 
 ```
 
