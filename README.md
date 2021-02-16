@@ -1,11 +1,68 @@
 # Redirect url ![alt text](https://api.travis-ci.org/KTH/redirect-url.svg?branch=master)
 
-Redirect a url to another absolute or relative url
+Redirect a url to another absolute or relative url.
+
+## Examples
+
+In these examples the redirect will listen for all requests to https://doamin.com/
+
+### Redirect any path to another host
 
 ```bash
-TO_HOST='https://wwww.kth.se' REDIRECT_ID='Id added to header x-kth-redirected-by-id' node app.js
-
+TO_HOST='https://wwww.kth.se' node app.js
 ```
+
+https://doamin.com/some/path/ -> https://kth.se/some/path/
+
+### Redirect a replace a part of the path when redirecting
+
+```bash
+TO_HOST='https://wwww.kth.se' REPLACE_PATH="/some/path/" REPLACE_PATH_WITH="/new/app/" node app.js
+```
+
+https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
+
+### Redirect a path in a Traefik 2 cluster.
+
+https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
+
+```yml
+labels:
+  - "traefik.http.routers.app1.rule=PathPrefix(`/some/`)"
+  - "traefik.http.services.app1.loadbalancer.server.port=80"
+  - "traefik.enable=true"
+```
+
+## Configuration
+
+`curl -I https://exapmpel.com/katalog/sf1624`
+
+```bash
+x-frame-options: sameorigin
+x-kth-redirect-id: Test-redirect added by team awesome
+x-kth-redirected-by: redirect-url:0.0.16_2b06f76
+```
+
+### REDIRECT_ID
+
+Add an enviroment variable `REDIRECT_ID` to add a HTTP header with information what made the redirect `x-kth-redirect-id: Test-redirect added by team awesome.`
+
+### TEMPORARY_REDIRECT
+
+The default redirect is a **Permanent Redirect**. To make the redirect temporary set `TEMPORARY_REDIRECT="True"`. Note that a temporary redirect is good since it is not stored forever in a brower, but is it also messes upp your SEO score.
+
+### LOG_LEVEL
+
+The default log level is `warning`. Posible values are INFO, DEBUG, SEVERE. Change by setting `LOG_LEVEL="debug"`.
+
+### PORT
+
+The default listen port is 80 change by setting `PORT=8080`.
+
+### Healthcheck paths
+
+A redirect has two healtchecks paths built in that are not redirected. `/_about` and `/_monitor`
+So if your redirect-url app listens on https://doamin.com/ https://doamin.com/_monitor and https://doamin.com/_about will not redirect, but any other path will.
 
 ## Unit tests
 
