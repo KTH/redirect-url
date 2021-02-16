@@ -1,4 +1,5 @@
-# Redirect url ![alt text](https://api.travis-ci.org/KTH/redirect-url.svg?branch=master)
+# Redirect url [![CircleCI](https://circleci.com/gh/KTH/redirect-url.svg?style=svg)](https://circleci.com/gh/KTH/redirect-url)
+
 
 Redirect a url to another absolute or relative url.
 
