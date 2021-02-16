@@ -14,7 +14,7 @@ TO_HOST='https://wwww.kth.se' node app.js
 
 https://doamin.com/some/path/ -> https://kth.se/some/path/
 
-### Redirect a replace a part of the path when redirecting
+### Redirect and replace a part of the path when redirecting
 
 ```bash
 TO_HOST='https://wwww.kth.se' REPLACE_PATH="/some/path/" REPLACE_PATH_WITH="/new/app/" node app.js
