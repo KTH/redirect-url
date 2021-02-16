@@ -27,6 +27,13 @@ https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
 https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
 
 ```yml
+environment:
+    TO_HOST: "https://www.kth.se"
+    REPLACE_PATH: "/some/path/"
+    REPLACE_PATH_WITH: "/new/app/"
+    TEMPORARY_REDIRECT: "true"
+    REDIRECT_ID: "Test-redirect added by team awesome"
+
 labels:
   - "traefik.http.routers.app1.rule=PathPrefix(`/some/`)"
   - "traefik.http.services.app1.loadbalancer.server.port=80"
