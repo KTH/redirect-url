@@ -52,11 +52,11 @@ x-kth-redirected-by: redirect-url:0.0.16_2b06f76
 
 ### REDIRECT_ID
 
-Add an enviroment variable `REDIRECT_ID` to add a HTTP header with information what made the redirect `x-kth-redirect-id: Test-redirect added by team awesome.`
+Add an enviroment variable `REDIRECT_ID` to add a HTTP header with information what made the redirect `x-kth-redirect-id: Old path for app1.`
 
 ### TEMPORARY_REDIRECT
 
-The default redirect is a **Permanent Redirect**. To make the redirect temporary set `TEMPORARY_REDIRECT="True"`. Note that a temporary redirect is good since it is not stored forever in a brower, but is it also messes upp your SEO score.
+The default redirect is a **Permanent Redirect**. To make the redirect temporary set `TEMPORARY_REDIRECT="True"`. Note that a temporary redirect is normally only a good thing during testing, since it messes upp your SEO score. Search crawlers does not follow _HTTP 307 Temporary Redirect_.
 
 ### LOG_LEVEL
 
