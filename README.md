@@ -1,6 +1,5 @@
 # Redirect url [![CircleCI](https://circleci.com/gh/KTH/redirect-url.svg?style=svg)](https://circleci.com/gh/KTH/redirect-url)
 
-
 Redirect a url to another absolute or relative url.
 
 ## Examples
@@ -29,11 +28,11 @@ https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
 
 ```yml
 environment:
-    TO_HOST: "https://www.kth.se"
-    REPLACE_PATH: "/some/path/"
-    REPLACE_PATH_WITH: "/new/app/"
-    TEMPORARY_REDIRECT: "true"
-    REDIRECT_ID: "Test-redirect added by team awesome"
+  TO_HOST: "https://www.kth.se"
+  REPLACE_PATH: "/some/path/"
+  REPLACE_PATH_WITH: "/new/app/"
+  TEMPORARY_REDIRECT: "true"
+  REDIRECT_ID: "Test-redirect added by team awesome"
 
 labels:
   - "traefik.http.routers.app1.rule=PathPrefix(`/some/`)"
