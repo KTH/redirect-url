@@ -6,11 +6,12 @@ const about = require("./config/version");
 const { log } = require("./modules/logger");
 const defaultEnvs = require("@kth/default-envs");
 const applicationInsights = require("./modules/applicationInsights");
+const e = require("express");
 const app = express();
 const started = new Date();
 
 /**
- * Let the package @kth/http-responses use the Tamarack log.
+ * Let the package @kth/http-responses use the Redirect-url log.
  */
 httpResponse.setLogger(log);
 
@@ -110,7 +111,14 @@ app.use(function (request, response) {
     httpResponse.ok(
       request,
       response,
-      templates._monitor((status = "OK")),
+      templates._monitor(
+        (status = "OK"),
+        `REDIRECT ID: ${
+          process.env.REDIRECT_ID
+        }\nREDIRECTS TO: ${app
+          .getRedirectUrl(request.url)
+          .replace("_monitor", "")}`
+      ),
       httpResponse.contentTypes.PLAIN_TEXT
     );
     return;
