@@ -4,7 +4,7 @@ Redirect a url to another absolute or relative url.
 
 ## Examples
 
-In these examples the redirect will listen for all requests to https://doamin.com/
+In these examples the redirect will listen for all requests to https://example.com/
 
 ### Redirect any path to another host
 
@@ -12,7 +12,7 @@ In these examples the redirect will listen for all requests to https://doamin.co
 TO_HOST='https://wwww.kth.se' node app.js
 ```
 
-https://doamin.com/some/path/ -> https://kth.se/some/path/
+https://example.com/some/path/ -> https://kth.se/some/path/
 
 ### Redirect and replace a part of the path when redirecting
 
@@ -20,11 +20,11 @@ https://doamin.com/some/path/ -> https://kth.se/some/path/
 TO_HOST='https://wwww.kth.se' REPLACE_PATH="/some/path/" REPLACE_PATH_WITH="/new/app/" node app.js
 ```
 
-https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
+https://example.com/some/path/index.html -> https://kth.se/new/app/index.html
 
 ### Redirect a path in a Traefik 2 cluster.
 
-https://doamin.com/some/path/index.html -> https://kth.se/new/app/index.html
+https://example.com/some/path/index.html -> https://kth.se/new/app/index.html
 
 ```yml
 environment:
@@ -69,7 +69,7 @@ The default listen port is 80 change by setting `PORT=8080`.
 ### Healthcheck paths
 
 A redirect has two healtchecks paths built in that are not redirected. `/_about` and `/_monitor`
-So if your redirect-url app listens on https://doamin.com/ https://doamin.com/_monitor and https://doamin.com/_about will not redirect, but any other path will.
+So if your redirect-url app listens on https://example.com/ https://example.com/_monitor and https://example.com/_about will not redirect, but any other path will.
 
 ## Unit tests
 
