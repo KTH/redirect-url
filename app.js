@@ -11,6 +11,14 @@ const app = express();
 const started = new Date();
 
 /**
+ * Response headers set by this application.
+ */
+const headers = {
+  X_KTH_REDIRECT_ID: "X-KTH-redirect-id",
+  X_KTH_REDIRECED_BY: "X-KTH-redirected-by",
+};
+
+/**
  * Let the package @kth/http-responses use the Redirect-url log.
  */
 httpResponse.setLogger(log);
@@ -64,7 +72,7 @@ app.cleanToUrl = function () {
  * url that matches REPLACE_PATH with REPLACE_PATH_WITH.
  * @param {*} requestUrl The path to redirect.
  */
-app.getRedirectUrl = function (requestUrl) {
+app.getRedirectToUrl = function (requestUrl) {
   let result = process.env.TO_HOST + requestUrl;
   if (process.env.REPLACE_PATH) {
     if (process.env.REPLACE_PATH_WITH) {
@@ -78,7 +86,7 @@ app.getRedirectUrl = function (requestUrl) {
 };
 
 /**
- * Is the env TEMPORARY_REDIRECT the string true
+ * Is the env TEMPORARY_REDIRECT the string "true".
  */
 app.useTemporaryRedirect = function () {
   if (String(process.env.TEMPORARY_REDIRECT).toLowerCase() == "true") {
@@ -90,50 +98,97 @@ app.useTemporaryRedirect = function () {
   return false;
 };
 
+/**
+ * Add the header X-KTH-redirect-id
+ */
+app.addHeaderRedirectId = function (response) {
+  if (process.env.REDIRECT_ID) {
+    response.set(headers.X_KTH_REDIRECT_ID, `${process.env.REDIRECT_ID}`);
+  }
+};
+
+/**
+ * Add the header X-KTH-redirected-by
+ */
+app.addHeaderRedirectedBy = function (response) {
+  response.set(
+    headers.X_KTH_REDIRECED_BY,
+    `${about.dockerName}:${about.dockerVersion}`
+  );
+};
+
+/**
+ * Show a page containing information about the application.
+ * @param {*} request
+ * @param {*} response
+ */
+app.handleAbout = function (request, response) {
+  httpResponse.ok(request, response, templates._about(about, started));
+};
+
+/**
+ * Show a health monitor page. Always contains "APPLICATION_STATUS: OK" if the service works.
+ * @param {*} request
+ * @param {*} response
+ */
+app.handleMonitor = function (request, response) {
+  let url = app.getRedirectToUrl(request.url).replace("_monitor", "");
+
+  let extras = `REDIRECT ID: ${process.env.REDIRECT_ID}\n`;
+  extras += `REDIRECTS TO: ${url}`;
+
+  httpResponse.ok(
+    request,
+    response,
+    templates._monitor((status = "OK"), extras),
+    httpResponse.contentTypes.PLAIN_TEXT
+  );
+};
+
+/**
+ * Check for previously set headers that indicate a possible redirect loop.
+ * In other words, the request was forwared by an ontehr redirect-url application.
+ *
+ * @param {*} request
+ * @param {*} toUrl
+ */
+app.handlePossibleRedirectLoop = function (request, toUrl) {
+  const redirectId = request.header(headers.X_KTH_REDIRECT_ID);
+  if (redirectId) {
+    log.warn(
+      `Found previously set '${headers.X_KTH_REDIRECT_ID}' header with value '${redirectId}', possible redirect loop for '${toUrl}'?`
+    );
+  }
+};
+
 /********************* routes **************************/
 
 /**
  * Redirect all traffic that does not end with '/_monitor' or '/_about'.
  */
 app.use(function (request, response) {
-  let url = app.getRedirectUrl(request.url);
+  let toUrl = app.getRedirectToUrl(request.url);
+  app.handlePossibleRedirectLoop(request, toUrl);
 
-  if (process.env.REDIRECT_ID) {
-    response.set(`X-KTH-redirect-id`, `${process.env.REDIRECT_ID}`);
-  }
+  app.addHeaderRedirectId(response);
 
   if (url.endsWith("/_about")) {
-    httpResponse.ok(request, response, templates._about(about, started));
+    app.handleAbout(request, response);
     return;
   }
 
   if (url.endsWith("/_monitor")) {
-    httpResponse.ok(
-      request,
-      response,
-      templates._monitor(
-        (status = "OK"),
-        `REDIRECT ID: ${
-          process.env.REDIRECT_ID
-        }\nREDIRECTS TO: ${app
-          .getRedirectUrl(request.url)
-          .replace("_monitor", "")}`
-      ),
-      httpResponse.contentTypes.PLAIN_TEXT
-    );
+    app.handleMonitor(request, response);
     return;
   }
 
-  response.set(
-    `X-KTH-redirected-by`,
-    `${about.dockerName}:${about.dockerVersion}`
-  );
+  app.addHeaderRedirectedBy(response);
 
   if (app.useTemporaryRedirect()) {
-    log.info(`Temporary redirected request for '${request.url}' to '${url}'`);
-    httpResponse.temporaryRedirect(response, url);
+    httpResponse.temporaryRedirect(response, toUrl);
+    log.info(`Temporary redirected request for '${request.url}' to '${toUrl}'`);
   } else {
-    log.info(`Permanent redirected request for '${request.url}' to '${url}'`);
-    httpResponse.permanentRedirect(response, url);
+    httpResponse.permanentRedirect(response, toUrl);
+    log.info(`Permanent redirected request for '${request.url}' to '${toUrl}'`);
   }
 });
