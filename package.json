@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@kth/basic-html-templates": "^1.0.37",
-    "@kth/default-envs": "^0.0.14",
+    "@kth/default-envs": "^0.0.15",
     "@kth/http-responses": "^1.0.43",
     "applicationinsights": "^1.8.10",
     "express": "^4.17.1",
@@ -33,6 +33,6 @@
     "package-update": "git pull && npm run clean & ncu -u && npm install && npm audit fix && npm test"
   },
   "engines": {
-    "node": "^12.14.0"
+    "node": "^12"
   }
 }

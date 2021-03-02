@@ -41,6 +41,7 @@ defaultEnvs.set(
     TEMPORARY_REDIRECT: false,
     REPLACE_PATH: undefined,
     REPLACE_PATH_WITH: undefined,
+    REMOVE_PATH_AFTER: undefined,
   },
   log
 );
@@ -74,6 +75,10 @@ app.cleanToUrl = function () {
  */
 app.getRedirectToUrl = function (requestUrl) {
   let result = process.env.TO_HOST + requestUrl;
+
+  // Remove part of a path
+  // I.e: REPLACE_PATH='/some/' REPLACE_PATH_WITH='other'
+  // example.com/some/path/index.html -> domain.com/other/path/index.html
   if (process.env.REPLACE_PATH) {
     if (process.env.REPLACE_PATH_WITH) {
       result = result.replace(
@@ -81,6 +86,15 @@ app.getRedirectToUrl = function (requestUrl) {
         process.env.REPLACE_PATH_WITH
       );
     }
+  }
+  // Remove anything after a path
+  // I.e: REMOVE_PATH_AFTER='/some/'
+  // example.com/some/path/index.html -> domain.org/some/
+  if (process.env.REMOVE_PATH_AFTER) {
+    const truncatAfter =
+      result.indexOf(process.env.REMOVE_PATH_AFTER) +
+      process.env.REMOVE_PATH_AFTER.length;
+    result = result.substring(0, truncatAfter);
   }
   return result;
 };
