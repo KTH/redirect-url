@@ -186,12 +186,12 @@ app.use(function (request, response) {
 
   app.addHeaderRedirectId(response);
 
-  if (url.endsWith("/_about")) {
+  if (request.url.endsWith("/_about")) {
     app.handleAbout(request, response);
     return;
   }
 
-  if (url.endsWith("/_monitor")) {
+  if (request.url.endsWith("/_monitor")) {
     app.handleMonitor(request, response);
     return;
   }

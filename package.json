@@ -25,6 +25,7 @@
   "scripts": {
     "start": "node app.js",
     "start-dev": "TEMPORARY_REDIRECT='True' LOG_LEVEL=debug TO_HOST='https://bbc.com/' REPLACE_PATH='news' REPLACE_PATH_WITH='moved-news' nodemon app.js",
+    "start-dev-truncate": "TEMPORARY_REDIRECT='True' LOG_LEVEL=debug TO_HOST='https://bbc.com/' REMOVE_PATH_AFTER='/news/' nodemon app.js",
     "test": "NODE_ENV=development node_modules/mocha/bin/mocha ./tests/unit-tests/test-*.js",
     "test-integration": "TO_HOST='https://www.kth.se' REDIRECT_ID='package.json' PATH_PREFIX='some-path' URL_PREFIX='http://localhost/some-path' ./tests/integration-tests/basic.sh",
     "test-integration-in-docker": "ID=$(docker build -q .) && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-integration-tests.yml build && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-integration-tests.yml up --force-recreate --abort-on-container-exit --always-recreate-deps",
