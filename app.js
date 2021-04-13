@@ -90,12 +90,13 @@ app.getRedirectToUrl = function (requestUrl) {
   // Remove anything after a path
   // I.e: REMOVE_PATH_AFTER='/some/'
   // example.com/some/path/index.html -> domain.org/some/
-  if (process.env.REMOVE_PATH_AFTER) {
+  if (process.env.REMOVE_PATH_AFTER != "undefined") {
     const truncatAfter =
       result.indexOf(process.env.REMOVE_PATH_AFTER) +
       process.env.REMOVE_PATH_AFTER.length;
     result = result.substring(0, truncatAfter);
   }
+
   return result;
 };
 
@@ -182,6 +183,7 @@ app.handlePossibleRedirectLoop = function (request, toUrl) {
  */
 app.use(function (request, response) {
   let toUrl = app.getRedirectToUrl(request.url);
+
   app.handlePossibleRedirectLoop(request, toUrl);
 
   app.addHeaderRedirectId(response);

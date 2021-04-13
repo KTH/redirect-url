@@ -15,7 +15,6 @@ services:
     environment:
       TO_HOST: "https://www.kth.se"
       REDIRECT_ID: "Docker Compose Integration Tests"
-      PATH_PREFIX: "/some-path"
     ports:
       - 80
 
