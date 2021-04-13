@@ -52,7 +52,7 @@ x-kth-redirected-by: redirect-url:0.0.16_2b06f76
 
 ### REDIRECT_ID
 
-Add an enviroment variable `REDIRECT_ID` to add a HTTP header with information what made the redirect `x-kth-redirect-id: Old path for app1.`
+Add an enviroment variable `REDIRECT_ID` to add a HTTP header with information who/what made the redirect `x-kth-redirect-id: Ticket #1234567`.
 
 ### TEMPORARY_REDIRECT
 
@@ -72,8 +72,6 @@ A redirect has two healtchecks paths built in that are not redirected. `/_about`
 So if your redirect-url app listens on https://example.com/ https://example.com/_monitor and https://example.com/_about will not redirect, but any other path will.
 
 ## Unit tests
-
-https://travis-ci.org/KTH/redirect-url
 
 ### In Docker
 
