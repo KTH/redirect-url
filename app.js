@@ -90,7 +90,7 @@ app.getRedirectToUrl = function (requestUrl) {
   // Remove anything after a path
   // I.e: REMOVE_PATH_AFTER='/some/'
   // example.com/some/path/index.html -> domain.org/some/
-  if (process.env.REMOVE_PATH_AFTER != "undefined") {
+  if (process.env.REMOVE_PATH_AFTER === undefined) {
     const truncatAfter =
       result.indexOf(process.env.REMOVE_PATH_AFTER) +
       process.env.REMOVE_PATH_AFTER.length;
