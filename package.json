@@ -15,7 +15,7 @@
     "@kth/http-responses": "^1.0.51",
     "applicationinsights": "^2.0.0",
     "express": "^4.17.1",
-    "kth-node-log": "^3.1.5"
+    "kth-node-log": "^3.1.6"
   },
   "devDependencies": {
     "chai": "^4.3.4",
