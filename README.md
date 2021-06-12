@@ -1,4 +1,4 @@
-# Redirect url [![CircleCI](https://circleci.com/gh/KTH/redirect-url.svg?style=svg)](https://circleci.com/gh/KTH/redirect-url)
+# Redirect url [![CircleCI](https://circleci.com/gh/KTH/redirect-url.svg?style=svg)](https://circleci.com/gh/KTH/redirect-url)  ![Continous Integration](https://github.com/KTH/redirect-url/actions/workflows/main.yml/badge.svg)
 
 Redirect a url to another absolute or relative url.
 
