@@ -25,7 +25,7 @@ services:
     # to /tests on the inside of the container.
     # The volume mount is done at startup.
     volumes:
-      - ./tests:/tests
+      - ${WORKSPACE}/tests:/tests
 
     # The unit test command that triggers tests to be run
     # inside the container
