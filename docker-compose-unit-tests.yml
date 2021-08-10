@@ -1,8 +1,8 @@
 version: '3.2'
 
 #
-# Run this integration test by running:
-# ID=$(docker build -q .) && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-integration-tests.yml up --abort-on-container-exit --always-recreate-deps
+# Run this unit test by running:
+# ID=$(docker build -q .) && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-unit-tests.yml up --abort-on-container-exit --always-recreate-deps
 #
 
 services:

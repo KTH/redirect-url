@@ -1,4 +1,4 @@
-FROM kthse/kth-nodejs:14.0.0
+FROM kthse/kth-nodejs:16.0.0
 
 COPY ["package.json", "package.json"]
 COPY ["package-lock.json", "package-lock.json"]
