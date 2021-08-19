@@ -12,10 +12,10 @@
   "dependencies": {
     "@kth/basic-html-templates": "^1.0.52",
     "@kth/default-envs": "^0.0.23",
-    "@kth/http-responses": "^1.0.59",
+    "@kth/http-responses": "^1.0.60",
     "applicationinsights": "^2.1.5",
     "express": "^4.17.1",
-    "kth-node-log": "^3.1.8"
+    "kth-node-log": "^3.1.9"
   },
   "devDependencies": {
     "chai": "^4.3.4",
