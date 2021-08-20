@@ -10,16 +10,16 @@
     "url": "git://github.com/KTH/redirect-url.git"
   },
   "dependencies": {
-    "@kth/basic-html-templates": "^1.0.52",
-    "@kth/default-envs": "^0.0.23",
-    "@kth/http-responses": "^1.0.60",
+    "@kth/basic-html-templates": "^1.0.53",
+    "@kth/default-envs": "^0.0.24",
+    "@kth/http-responses": "^1.0.62",
     "applicationinsights": "^2.1.5",
     "express": "^4.17.1",
     "kth-node-log": "^3.1.9"
   },
   "devDependencies": {
     "chai": "^4.3.4",
-    "mocha": "^9.0.3",
+    "mocha": "^9.1.0",
     "nodemon": "^2.0.12"
   },
   "scripts": {
