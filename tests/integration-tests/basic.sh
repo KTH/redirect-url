@@ -6,8 +6,9 @@ passed() { printf "\033[0;32m • $@\033[0;0m\n"; }
 
 if [ -z "$URL_PREFIX" ]; then
     URL_PREFIX="http://web/some-path"
-    sleep 5s
 fi
+
+sleep 10s
 
 FAILED=""
 
@@ -15,9 +16,9 @@ FAILED=""
 # Curls a url and tests if the response contains a string.
 # If it fails sets FAILED to true.
 #
-# Usage: expectPathToContain "/_monitor" "active"
+# Usage: expectResponseToContain "/_monitor" "active"
 #
-expectPathToContain() {
+expectResponseToContain() {
     
     ENDPOINT="$1"
     PATTERN="$2"
@@ -50,9 +51,9 @@ expectPathToContain() {
 # Curls a url and tests if the response contains a string.
 # If it fails sets FAILED to true.
 #
-# Usage: expectPathToContain "/_monitor" "active"
+# Usage: expectResponseToContain "/_monitor" "active"
 #
-expectPathToContainHeader() {
+expectResponseToContainHeader() {
     
     ENDPOINT="$1"
     PATTERN="$2"
@@ -85,11 +86,11 @@ expectPathToContainHeader() {
 
 # ---------------- Tests ----------------
 
-expectPathToContain "/_monitor" "APPLICATION_STATUS: OK" "Default check APPLICATION_STATUS: OK"
-expectPathToContain "/_about" "Docker image" "The about page should show Docker images information"
-expectPathToContainHeader "/_about" "200 OK" "_about should return 200 Ok response"
-expectPathToContainHeader "/_monitor" "200 OK" "_monitor should return 200 Ok response"
-expectPathToContainHeader "/redirect/this/path" "301 Moved Permanently" "A redirect path should 307 Temporary"
+expectResponseToContain "/_monitor" "APPLICATION_STATUS: OK" "Default check APPLICATION_STATUS: OK"
+expectResponseToContain "/_about" "Docker image" "The about page should show Docker images information"
+expectResponseToContainHeader "/_about" "200 OK" "_about should return 200 Ok response"
+expectResponseToContainHeader "/_monitor" "200 OK" "_monitor should return 200 Ok response"
+expectResponseToContainHeader "/redirect/this/path" "301 Moved Permanently" "A redirect path should 307 Temporary"
 
 # Result
 if [[ "$FAILED" != *"true"* ]]; then
