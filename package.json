@@ -13,7 +13,7 @@
     "@kth/basic-html-templates": "^1.0.58",
     "@kth/default-envs": "^0.0.31",
     "@kth/http-responses": "^1.0.67",
-    "applicationinsights": "^2.1.8",
+    "applicationinsights": "^2.1.9",
     "express": "^4.17.1",
     "kth-node-log": "^3.1.10"
   },
