@@ -13,9 +13,9 @@
     "@kth/basic-html-templates": "^1.0.65",
     "@kth/default-envs": "^0.0.39",
     "@kth/http-responses": "^1.0.74",
+    "@kth/log": "^4.0.0",
     "applicationinsights": "^2.2.0",
-    "express": "^4.17.2",
-    "kth-node-log": "^3.1.11"
+    "express": "^4.17.2"
   },
   "devDependencies": {
     "chai": "^4.3.4",
