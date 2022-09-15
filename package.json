@@ -14,7 +14,7 @@
     "@kth/default-envs": "^0.0.51",
     "@kth/http-responses": "^1.0.78",
     "@kth/log": "^4.0.5",
-    "applicationinsights": "^2.3.4",
+    "applicationinsights": "^2.3.5",
     "express": "^4.18.1"
   },
   "devDependencies": {
