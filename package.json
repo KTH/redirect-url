@@ -10,7 +10,7 @@
     "url": "git://github.com/KTH/redirect-url.git"
   },
   "dependencies": {
-    "@kth/basic-html-templates": "^1.0.70",
+    "@kth/basic-html-templates": "^1.0.71",
     "@kth/default-envs": "^0.0.51",
     "@kth/http-responses": "^1.0.79",
     "@kth/log": "^4.0.5",
