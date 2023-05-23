@@ -1,4 +1,4 @@
-FROM kthse/kth-nodejs:16.0.0
+FROM kthregistry.azurecr.io/kth-nodejs-16:latest
 
 COPY ["package.json", "package.json"]
 COPY ["package-lock.json", "package-lock.json"]
